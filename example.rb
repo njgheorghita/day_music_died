@@ -2,9 +2,9 @@ require 'alchemyapi'
 
 demo_text = 'Yesterday dumb Bob destroyed my fancy iPhone in beautiful Denver, Colorado. I guess I will have to head over to the Apple Store and buy a new one.'
 demo_url = 'http://blog.programmableweb.com/2011/09/16/new-api-billionaire-text-extractor-alchemy/'
-demo_html = '<html><head><title>Python Demo | AlchemyAPI</title></head><body><h1>Did you know that AlchemyAPI works on HTML?</h1><p>Well, you do now.</p></body></html>'
+demo_html = '<html><head><title>Python Demo | alchemyapi</title></head><body><h1>Did you know that alchemyapi works on HTML?</h1><p>Well, you do now.</p></body></html>'
 
-AlchemyAPI
+alchemyapi = AlchemyAPI.new()
 
 
 puts ''
@@ -18,7 +18,7 @@ puts ''
 puts 'Processing text: ' + demo_text
 puts ''
 
-response = AlchemyAPI.entities('text', demo_text, { 'sentiment'=>1 })
+response = alchemyapi.entities('text', demo_text, { 'sentiment'=>1 })
 
 if response['status'] == 'OK'
 	puts '## Response Object ##'
@@ -51,7 +51,7 @@ puts ''
 puts 'Processing html: ' + demo_html
 puts ''
 
-response = AlchemyAPI.sentiment('html', demo_html)
+response = alchemyapi.sentiment('html', demo_html)
 
 if response['status'] == 'OK'
 	puts '## Response Object ##'
@@ -79,7 +79,7 @@ puts ''
 puts 'Processing text: ' + demo_text
 puts ''
 
-response = AlchemyAPI.keywords('text', demo_text, { 'sentiment'=>1 })
+response = alchemyapi.keywords('text', demo_text, { 'sentiment'=>1 })
 
 if response['status'] == 'OK'
 	puts '## Response Object ##'
@@ -111,7 +111,7 @@ puts ''
 puts 'Processing text: ' + demo_text
 puts ''
 
-response = AlchemyAPI.concepts('text', demo_text)
+response = alchemyapi.concepts('text', demo_text)
 
 if response['status'] == 'OK'
 	puts '## Response Object ##'
@@ -142,7 +142,7 @@ puts ''
 puts 'Processing text: ' + demo_text
 puts ''
 
-response = AlchemyAPI.relations('text', demo_text)
+response = alchemyapi.relations('text', demo_text)
 
 if response['status'] == 'OK'
 	puts '## Response Object ##'
@@ -182,7 +182,7 @@ puts ''
 puts 'Processing text: ' + demo_text
 puts ''
 
-response = AlchemyAPI.category('text', demo_text)
+response = alchemyapi.category('text', demo_text)
 
 if response['status'] == 'OK'
 	puts '## Response Object ##'
@@ -210,7 +210,7 @@ puts ''
 puts 'Processing text: ' + demo_text
 puts ''
 
-response = AlchemyAPI.language('text', demo_text)
+response = alchemyapi.language('text', demo_text)
 
 if response['status'] == 'OK'
 	puts '## Response Object ##'
@@ -239,7 +239,7 @@ puts ''
 puts 'Processing url: ' + demo_url
 puts ''
 
-response = AlchemyAPI.author('url', demo_url)
+response = alchemyapi.author('url', demo_url)
 
 if response['status'] == 'OK'
 	puts '## Response Object ##'
@@ -266,7 +266,7 @@ puts ''
 puts 'Processing url: ' + demo_url
 puts ''
 
-response = AlchemyAPI.feeds('url', demo_url)
+response = alchemyapi.feeds('url', demo_url)
 
 if response['status'] == 'OK'
 	puts '## Response Object ##'

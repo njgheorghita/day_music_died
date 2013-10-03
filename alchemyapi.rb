@@ -3,64 +3,65 @@ require 'net/http'
 require 'uri'
 require 'json'
 
-module AlchemyAPI
+class AlchemyAPI
 
-	def AlchemyAPI.initialize()
-		#Setup the endpoints
-		@ENDPOINTS = {}
-		@ENDPOINTS['sentiment'] = {}
-		@ENDPOINTS['sentiment']['url'] = '/url/URLGetTextSentiment'
-		@ENDPOINTS['sentiment']['text'] = '/text/TextGetTextSentiment'
-		@ENDPOINTS['sentiment']['html'] = '/html/HTMLGetTextSentiment'
-		@ENDPOINTS['sentiment_targeted'] = {}
-		@ENDPOINTS['sentiment_targeted']['url'] = '/url/URLGetTargetedSentiment'
-		@ENDPOINTS['sentiment_targeted']['text'] = '/text/TextGetTargetedSentiment'
-		@ENDPOINTS['sentiment_targeted']['html'] = '/html/HTMLGetTargetedSentiment'
-		@ENDPOINTS['author'] = {}
-		@ENDPOINTS['author']['url'] = '/url/URLGetAuthor'
-		@ENDPOINTS['author']['html'] = '/html/HTMLGetAuthor'
-		@ENDPOINTS['keywords'] = {}
-		@ENDPOINTS['keywords']['url'] = '/url/URLGetRankedKeywords'
-		@ENDPOINTS['keywords']['text'] = '/text/TextGetRankedKeywords'
-		@ENDPOINTS['keywords']['html'] = '/html/HTMLGetRankedKeywords'
-		@ENDPOINTS['concepts'] = {}
-		@ENDPOINTS['concepts']['url'] = '/url/URLGetRankedConcepts'
-		@ENDPOINTS['concepts']['text'] = '/text/TextGetRankedConcepts'
-		@ENDPOINTS['concepts']['html'] = '/html/HTMLGetRankedConcepts'
-		@ENDPOINTS['entities'] = {}
-		@ENDPOINTS['entities']['url'] = '/url/URLGetRankedNamedEntities'
-		@ENDPOINTS['entities']['text'] = '/text/TextGetRankedNamedEntities'
-		@ENDPOINTS['entities']['html'] = '/html/HTMLGetRankedNamedEntities'
-		@ENDPOINTS['category'] = {}
-		@ENDPOINTS['category']['url']  = '/url/URLGetCategory'
-		@ENDPOINTS['category']['text'] = '/text/TextGetCategory'
-		@ENDPOINTS['category']['html'] = '/html/HTMLGetCategory'
-		@ENDPOINTS['relations'] = {}
-		@ENDPOINTS['relations']['url']  = '/url/URLGetRelations'
-		@ENDPOINTS['relations']['text'] = '/text/TextGetRelations'
-		@ENDPOINTS['relations']['html'] = '/html/HTMLGetRelations'
-		@ENDPOINTS['language'] = {}
-		@ENDPOINTS['language']['url']  = '/url/URLGetLanguage'
-		@ENDPOINTS['language']['text'] = '/text/TextGetLanguage'
-		@ENDPOINTS['language']['html'] = '/html/HTMLGetLanguage'
-		@ENDPOINTS['text_clean'] = {}
-		@ENDPOINTS['text_clean']['url']  = '/url/URLGetText'
-		@ENDPOINTS['text_clean']['html'] = '/html/HTMLGetText'
-		@ENDPOINTS['text_raw'] = {}
-		@ENDPOINTS['text_raw']['url']  = '/url/URLGetRawText'
-		@ENDPOINTS['text_raw']['html'] = '/html/HTMLGetRawText'
-		@ENDPOINTS['text_title'] = {}
-		@ENDPOINTS['text_title']['url']  = '/url/URLGetTitle'
-		@ENDPOINTS['text_title']['html'] = '/html/HTMLGetTitle'
-		@ENDPOINTS['feeds'] = {}
-		@ENDPOINTS['feeds']['url']  = '/url/URLGetFeedLinks'
-		@ENDPOINTS['feeds']['html'] = '/html/HTMLGetFeedLinks'
-		@ENDPOINTS['microformats'] = {}
-		@ENDPOINTS['microformats']['url']  = '/url/URLGetMicroformatData'
-		@ENDPOINTS['microformats']['html'] = '/html/HTMLGetMicroformatData'
+	#Setup the endpoints
+	@@ENDPOINTS = {}
+	@@ENDPOINTS['sentiment'] = {}
+	@@ENDPOINTS['sentiment']['url'] = '/url/URLGetTextSentiment'
+	@@ENDPOINTS['sentiment']['text'] = '/text/TextGetTextSentiment'
+	@@ENDPOINTS['sentiment']['html'] = '/html/HTMLGetTextSentiment'
+	@@ENDPOINTS['sentiment_targeted'] = {}
+	@@ENDPOINTS['sentiment_targeted']['url'] = '/url/URLGetTargetedSentiment'
+	@@ENDPOINTS['sentiment_targeted']['text'] = '/text/TextGetTargetedSentiment'
+	@@ENDPOINTS['sentiment_targeted']['html'] = '/html/HTMLGetTargetedSentiment'
+	@@ENDPOINTS['author'] = {}
+	@@ENDPOINTS['author']['url'] = '/url/URLGetAuthor'
+	@@ENDPOINTS['author']['html'] = '/html/HTMLGetAuthor'
+	@@ENDPOINTS['keywords'] = {}
+	@@ENDPOINTS['keywords']['url'] = '/url/URLGetRankedKeywords'
+	@@ENDPOINTS['keywords']['text'] = '/text/TextGetRankedKeywords'
+	@@ENDPOINTS['keywords']['html'] = '/html/HTMLGetRankedKeywords'
+	@@ENDPOINTS['concepts'] = {}
+	@@ENDPOINTS['concepts']['url'] = '/url/URLGetRankedConcepts'
+	@@ENDPOINTS['concepts']['text'] = '/text/TextGetRankedConcepts'
+	@@ENDPOINTS['concepts']['html'] = '/html/HTMLGetRankedConcepts'
+	@@ENDPOINTS['entities'] = {}
+	@@ENDPOINTS['entities']['url'] = '/url/URLGetRankedNamedEntities'
+	@@ENDPOINTS['entities']['text'] = '/text/TextGetRankedNamedEntities'
+	@@ENDPOINTS['entities']['html'] = '/html/HTMLGetRankedNamedEntities'
+	@@ENDPOINTS['category'] = {}
+	@@ENDPOINTS['category']['url']  = '/url/URLGetCategory'
+	@@ENDPOINTS['category']['text'] = '/text/TextGetCategory'
+	@@ENDPOINTS['category']['html'] = '/html/HTMLGetCategory'
+	@@ENDPOINTS['relations'] = {}
+	@@ENDPOINTS['relations']['url']  = '/url/URLGetRelations'
+	@@ENDPOINTS['relations']['text'] = '/text/TextGetRelations'
+	@@ENDPOINTS['relations']['html'] = '/html/HTMLGetRelations'
+	@@ENDPOINTS['language'] = {}
+	@@ENDPOINTS['language']['url']  = '/url/URLGetLanguage'
+	@@ENDPOINTS['language']['text'] = '/text/TextGetLanguage'
+	@@ENDPOINTS['language']['html'] = '/html/HTMLGetLanguage'
+	@@ENDPOINTS['text_clean'] = {}
+	@@ENDPOINTS['text_clean']['url']  = '/url/URLGetText'
+	@@ENDPOINTS['text_clean']['html'] = '/html/HTMLGetText'
+	@@ENDPOINTS['text_raw'] = {}
+	@@ENDPOINTS['text_raw']['url']  = '/url/URLGetRawText'
+	@@ENDPOINTS['text_raw']['html'] = '/html/HTMLGetRawText'
+	@@ENDPOINTS['text_title'] = {}
+	@@ENDPOINTS['text_title']['url']  = '/url/URLGetTitle'
+	@@ENDPOINTS['text_title']['html'] = '/html/HTMLGetTitle'
+	@@ENDPOINTS['feeds'] = {}
+	@@ENDPOINTS['feeds']['url']  = '/url/URLGetFeedLinks'
+	@@ENDPOINTS['feeds']['html'] = '/html/HTMLGetFeedLinks'
+	@@ENDPOINTS['microformats'] = {}
+	@@ENDPOINTS['microformats']['url']  = '/url/URLGetMicroformatData'
+	@@ENDPOINTS['microformats']['html'] = '/html/HTMLGetMicroformatData'
 		
-		@BASE_URL = 'http://access.alchemyapi.com/calls'
-		
+	@@BASE_URL = 'http://access.alchemyapi.com/calls'
+	
+	
+	def initialize()
 	
 		begin
 			key = File.read('api_key.txt')
@@ -69,7 +70,7 @@ module AlchemyAPI
 			if key.empty?
 				#The key file should't be blank
 				puts 'The api_key.txt file appears to be blank, please copy/paste your API key in the file: api_key.txt'
-				puts 'If you do not have an API Key from AlchemyAPI, please register for one at: http://www.alchemyapi.com/api/register.html'			
+				puts 'If you do not have an API Key from  please register for one at: http://www.alchemyapi.com/api/register.html'			
 				Process.exit(1)
 			end
 			
@@ -79,11 +80,11 @@ module AlchemyAPI
 				Process.exit(1)
 			end
 
-			@api_key = key
+			@apiKey = key
 		rescue => err
 			#The file doesn't exist, so show the message and create the file.
 			puts 'API Key not found! Please copy/paste your API key into the file: api_key.txt'
-			puts 'If you do not have an API Key from AlchemyAPI, please register for one at: http://www.alchemyapi.com/api/register.html'
+			puts 'If you do not have an API Key from  please register for one at: http://www.alchemyapi.com/api/register.html'
 		
 			#create a blank file to hold the key
 			File.open("api_key.txt", "w") {}
@@ -98,12 +99,12 @@ module AlchemyAPI
 	# If you don't have an API key yet, register for one at: http://www.alchemyapi.com/api/register.html
 	# 
 	# INPUT:
-	# key -> Your API key from AlchemyAPI. Should be 40 hex characters
+	# key -> Your API key from  Should be 40 hex characters
 	# 
 	# OUTPUT:
 	# none
 	#
-	def AlchemyAPI.setkey(key)
+	def setkey(key)
 		#write the key to the file
 		File.open('api_key.txt','w') {|f| f.write(key) }
 	end
@@ -122,26 +123,16 @@ module AlchemyAPI
 	# showSourceText -> 0: disabled (default), 1: enabled
  	#
 	# OUTPUT:
-	# The response, already converted from JSON to a Python object. 
+	# The response, already converted from JSON to a Ruby object. 
  	#
-	def AlchemyAPI.sentiment(flavor, data, options = {})
-		initialize() if @api_key.nil?
-	
-		unless @ENDPOINTS['sentiment'].key?(flavor)
+	def sentiment(flavor, data, options = {})
+		unless @@ENDPOINTS['sentiment'].key?(flavor)
 			return { 'status'=>'ERROR', 'statusInfo'=>'sentiment analysis for ' + flavor + ' not available' }
 		end
 
-		url = @BASE_URL + 
-				@ENDPOINTS['sentiment'][flavor] +
-				'?apikey=' + @api_key +
-				'&' + flavor + '=' + URI.escape(data) +
-				'&outputMode=json'
-
-		options.each do | key, value |
-			url += '&' + key + '=' + value.to_s()
-		end
-
-		return analyze(url)
+		#Add the URL encoded data to the options and analyze
+		options[flavor] = URI.escape(data)
+		return analyze(@@ENDPOINTS['sentiment'][flavor], options)
 	end
 
 
@@ -159,30 +150,21 @@ module AlchemyAPI
 	# showSourceText	-> 0: disabled, 1: enabled
 	#
 	# OUTPUT:
-	# The response, already converted from JSON to a Python object. 
+	# The response, already converted from JSON to a Ruby object. 
 	#
-	def AlchemyAPI.sentiment_targeted(flavor, data,target, options = {})
-		initialize() if @api_key.nil?
-	
+	def sentiment_targeted(flavor, data,target, options = {})
 		unless targeted == ''
 			return { 'status'=>'ERROR', 'statusMessage'=>'targeted sentiment requires a non-null target' }
 		end
 
-		unless @ENDPOINTS['sentiment_targeted'].key?(flavor)
+		unless @@ENDPOINTS['sentiment_targeted'].key?(flavor)
 			return { 'status'=>'ERROR', 'statusInfo'=>'targeted sentiment analysis for ' + flavor + ' not available' }
 		end
 
-		url = @BASE_URL + 
-				@ENDPOINTS['sentiment_targeted'][flavor] +
-				'?apikey=' + @api_key +
-				'&' + flavor + '=' + URI.escape(data) +
-				'&outputMode=json'
-
-		options.each do | key, value |
-			url += '&' + key + '=' + value.to_s()
-		end
-
-		return analyze(url)
+		#Add the URL encoded data and the target to the options and analyze
+		options[flavor] = URI.escape(data)
+		options['target'] = target
+		return analyze(@@ENDPOINTS['sentiment_targeted'][flavor], options)
 	end
 
 
@@ -205,26 +187,16 @@ module AlchemyAPI
 	# maxRetrieve -> the maximum number of entities to retrieve (default: 50)
 	# 
 	# OUTPUT:
-	# The response, already converted from JSON to a Python object. 
+	# The response, already converted from JSON to a Ruby object. 
 	#
-	def AlchemyAPI.entities(flavor, data, options = {})
-		initialize() if @api_key.nil?
-
-		unless @ENDPOINTS['entities'].key?(flavor)
+	def entities(flavor, data, options = {})
+		unless @@ENDPOINTS['entities'].key?(flavor)
 			return { 'status'=>'ERROR', 'statusInfo'=>'entity extraction for ' + flavor + ' not available' }
 		end
 
-		url = @BASE_URL + 
-				@ENDPOINTS['entities'][flavor] +
-				'?apikey=' + @api_key +
-				'&' + flavor + '=' + URI.escape(data) +
-				'&outputMode=json'
-
-		options.each do | key, value |
-			url += '&' + key + '=' + value.to_s()
-		end
-
-		return analyze(url)
+		#Add the URL encoded data to the options and analyze
+		options[flavor] = URI.escape(data)
+		return analyze(@@ENDPOINTS['entities'][flavor], options)
 	end
 
 
@@ -241,26 +213,16 @@ module AlchemyAPI
 	# none
 	#
 	# OUTPUT:
-	# The response, already converted from JSON to a Python object. 
+	# The response, already converted from JSON to a Ruby object. 
 	#
-	def AlchemyAPI.author(flavor, data, options = {})
-		initialize() if @api_key.nil?
-	
-		unless @ENDPOINTS['author'].key?(flavor)
+	def author(flavor, data, options = {})
+		unless @@ENDPOINTS['author'].key?(flavor)
 			return { 'status'=>'ERROR', 'statusInfo'=>'author extraction for ' + flavor + ' not available' }
 		end
 
-		url = @BASE_URL + 
-				@ENDPOINTS['author'][flavor] +
-				'?apikey=' + @api_key +
-				'&' + flavor + '=' + URI.escape(data) +
-				'&outputMode=json'
-
-		options.each do | key, value |
-			url += '&' + key + '=' + value.to_s()
-		end
-
-		return analyze(url)
+		#Add the URL encoded data to the options and analyze
+		options[flavor] = URI.escape(data)
+		return analyze(@@ENDPOINTS['author'][flavor], options)
 	end
 
 
@@ -280,26 +242,16 @@ module AlchemyAPI
 	# maxRetrieve -> the max number of keywords returned (default: 50)
 	#
 	# OUTPUT:
-	# The response, already converted from JSON to a Python object. 
+	# The response, already converted from JSON to a Ruby object. 
 	#	
-	def AlchemyAPI.keywords(flavor, data, options = {})
-		initialize() if @api_key.nil?
-	
-		unless @ENDPOINTS['keywords'].key?(flavor)
+	def keywords(flavor, data, options = {})
+		unless @@ENDPOINTS['keywords'].key?(flavor)
 			return { 'status'=>'ERROR', 'statusInfo'=>'keyword extraction for ' + flavor + ' not available' }
 		end
 
-		url = @BASE_URL + 
-				@ENDPOINTS['keywords'][flavor] +
-				'?apikey=' + @api_key +
-				'&' + flavor + '=' + URI.escape(data) +
-				'&outputMode=json'
-
-		options.each do | key, value |
-			url += '&' + key + '=' + value.to_s()
-		end
-
-		return analyze(url)
+		#Add the URL encoded data to the options and analyze
+		options[flavor] = URI.escape(data)
+		return analyze(@@ENDPOINTS['keywords'][flavor], options)
 	end
 
 	
@@ -313,26 +265,16 @@ module AlchemyAPI
 	# showSourceText -> 0:disabled (default), 1: enabled
 	#
 	# OUTPUT:
-	# The response, already converted from JSON to a Python object. 
+	# The response, already converted from JSON to a Ruby object. 
 	#
-	def AlchemyAPI.concepts(flavor, data, options = {})
-		initialize() if @api_key.nil?
-	
-		unless @ENDPOINTS['concepts'].key?(flavor)
+	def concepts(flavor, data, options = {})
+		unless @@ENDPOINTS['concepts'].key?(flavor)
 			return { 'status'=>'ERROR', 'statusInfo'=>'concept tagging for ' + flavor + ' not available' }
 		end
 
-		url = @BASE_URL + 
-				@ENDPOINTS['concepts'][flavor] +
-				'?apikey=' + @api_key +
-				'&' + flavor + '=' + URI.escape(data) +
-				'&outputMode=json'
-
-		options.each do | key, value |
-			url += '&' + key + '=' + value.to_s()
-		end
-
-		return analyze(url)
+		#Add the URL encoded data to the options and analyze
+		options[flavor] = URI.escape(data)
+		return analyze(@@ENDPOINTS['concepts'][flavor], options)
 	end
 
 
@@ -349,26 +291,16 @@ module AlchemyAPI
 	# showSourceText -> 0: disabled (default), 1: enabled
 	# 
 	# OUTPUT:
-	# The response, already converted from JSON to a Python object. 
+	# The response, already converted from JSON to a Ruby object. 
 	#
-	def AlchemyAPI.category(flavor, data, options = {})
-		initialize() if @api_key.nil?
-	
-		unless @ENDPOINTS['category'].key?(flavor)
+	def category(flavor, data, options = {})
+		unless @@ENDPOINTS['category'].key?(flavor)
 			return { 'status'=>'ERROR', 'statusInfo'=>'text categorization for ' + flavor + ' not available' }
 		end
 
-		url = @BASE_URL + 
-				@ENDPOINTS['category'][flavor] +
-				'?apikey=' + @api_key +
-				'&' + flavor + '=' + URI.escape(data) +
-				'&outputMode=json'
-
-		options.each do | key, value |
-			url += '&' + key + '=' + value.to_s()
-		end
-
-		return analyze(url)
+		#Add the URL encoded data to the options and analyze
+		options[flavor] = URI.escape(data)
+		return analyze(@@ENDPOINTS['category'][flavor], options)
 	end
 
 
@@ -394,26 +326,16 @@ module AlchemyAPI
 	# maxRetrieve -> the maximum number of relations to extract (default: 50, max: 100)
 	#
 	# OUTPUT:
-	# The response, already converted from JSON to a Python object. 
+	# The response, already converted from JSON to a Ruby object. 
 	#
-	def AlchemyAPI.relations(flavor, data, options = {})
-		initialize() if @api_key.nil?
-	
-		unless @ENDPOINTS['relations'].key?(flavor)
+	def relations(flavor, data, options = {})
+		unless @@ENDPOINTS['relations'].key?(flavor)
 			return { 'status'=>'ERROR', 'statusInfo'=>'relation extraction for ' + flavor + ' not available' }
 		end
 
-		url = @BASE_URL + 
-				@ENDPOINTS['relations'][flavor] +
-				'?apikey=' + @api_key +
-				'&' + flavor + '=' + URI.escape(data) +
-				'&outputMode=json'
-
-		options.each do | key, value |
-			url += '&' + key + '=' + value.to_s()
-		end
-
-		return analyze(url)
+		#Add the URL encoded data to the options and analyze
+		options[flavor] = URI.escape(data)
+		return analyze(@@ENDPOINTS['relations'][flavor], options)
 	end
 
 
@@ -430,26 +352,16 @@ module AlchemyAPI
 	# none
 	#
 	# OUTPUT:
-	# The response, already converted from JSON to a Python object.
+	# The response, already converted from JSON to a Ruby object.
 	#
-	def AlchemyAPI.language(flavor, data, options = {})
-		initialize() if @api_key.nil?
-	
-		unless @ENDPOINTS['language'].key?(flavor)
+	def language(flavor, data, options = {})
+		unless @@ENDPOINTS['language'].key?(flavor)
 			return { 'status'=>'ERROR', 'statusInfo'=>'language detection for ' + flavor + ' not available' }
 		end
 
-		url = @BASE_URL + 
-				@ENDPOINTS['language'][flavor] +
-				'?apikey=' + @api_key +
-				'&' + flavor + '=' + URI.escape(data) +
-				'&outputMode=json'
-
-		options.each do | key, value |
-			url += '&' + key + '=' + value.to_s()
-		end
-
-		return analyze(url)
+		#Add the URL encoded data to the options and analyze
+		options[flavor] = URI.escape(data)
+		return analyze(@@ENDPOINTS['language'][flavor], options)
 	end
 
 
@@ -467,26 +379,16 @@ module AlchemyAPI
 	# extractLinks -> include links, 0: disabled (default), 1: enabled.
 	# 
 	# OUTPUT:
-	# The response, already converted from JSON to a Python object. 
+	# The response, already converted from JSON to a Ruby object. 
 	#
-	def AlchemyAPI.text_clean(flavor, data, options = {})
-		initialize() if @api_key.nil?
-	
-		unless @ENDPOINTS['text_clean'].key?(flavor)
+	def text_clean(flavor, data, options = {})
+		unless @@ENDPOINTS['text_clean'].key?(flavor)
 			return { 'status'=>'ERROR', 'statusInfo'=>'clean text extraction for ' + flavor + ' not available' }
 		end
 
-		url = @BASE_URL + 
-				@ENDPOINTS['text_clean'][flavor] +
-				'?apikey=' + @api_key +
-				'&' + flavor + '=' + URI.escape(data) +
-				'&outputMode=json'
-
-		options.each do | key, value |
-			url += '&' + key + '=' + value.to_s()
-		end
-
-		return analyze(url)
+		#Add the URL encoded data to the options and analyze
+		options[flavor] = URI.escape(data)
+		return analyze(@@ENDPOINTS['text_clean'][flavor], options)
 	end
 
 
@@ -503,26 +405,16 @@ module AlchemyAPI
 	# none
 	#
 	# OUTPUT:
-	# The response, already converted from JSON to a Python object. 
+	# The response, already converted from JSON to a Ruby object. 
 	#
-	def AlchemyAPI.text_raw(flavor, data, options = {})
-		initialize() if @api_key.nil?
-	
-		unless @ENDPOINTS['text_raw'].key?(flavor)
+	def text_raw(flavor, data, options = {})
+		unless @@ENDPOINTS['text_raw'].key?(flavor)
 			return { 'status'=>'ERROR', 'statusInfo'=>'raw text extraction for ' + flavor + ' not available' }
 		end
 
-		url = @BASE_URL + 
-				@ENDPOINTS['text_raw'][flavor] +
-				'?apikey=' + @api_key +
-				'&' + flavor + '=' + URI.escape(data) +
-				'&outputMode=json'
-
-		options.each do | key, value |
-			url += '&' + key + '=' + value.to_s()
-		end
-
-		return analyze(url)
+		#Add the URL encoded data to the options and analyze
+		options[flavor] = URI.escape(data)
+		return analyze(@@ENDPOINTS['text_raw'][flavor], options)
 	end
 
 
@@ -539,26 +431,16 @@ module AlchemyAPI
 	# useMetadata -> utilize title info embedded in meta data, 0: disabled, 1: enabled (default) 
 
 	# OUTPUT:
-	# The response, already converted from JSON to a Python object. 
+	# The response, already converted from JSON to a Ruby object. 
 	#
-	def AlchemyAPI.text_title(flavor, data, options = {})
-		initialize() if @api_key.nil?
-	
-		unless @ENDPOINTS['text_title'].key?(flavor)
+	def text_title(flavor, data, options = {})
+		unless @@ENDPOINTS['text_title'].key?(flavor)
 			return { 'status'=>'ERROR', 'statusInfo'=>'title extraction for ' + flavor + ' not available' }
 		end
 
-		url = @BASE_URL + 
-				@ENDPOINTS['text_title'][flavor] +
-				'?apikey=' + @api_key +
-				'&' + flavor + '=' + URI.escape(data) +
-				'&outputMode=json'
-
-		options.each do | key, value |
-			url += '&' + key + '=' + value.to_s()
-		end
-
-		return analyze(url)
+		#Add the URL encoded data to the options and analyze
+		options[flavor] = URI.escape(data)
+		return analyze(@@ENDPOINTS['text_raw'][flavor], options)
 	end
 
 
@@ -575,26 +457,16 @@ module AlchemyAPI
 	# none
 	#
 	# OUTPUT:
-	# The response, already converted from JSON to a Python object. 
+	# The response, already converted from JSON to a Ruby object. 
 	#
-	def AlchemyAPI.microformats(flavor, data, options = {})
-		initialize() if @api_key.nil?
-	
-		unless @ENDPOINTS['microformats'].key?(flavor)
+	def microformats(flavor, data, options = {})
+		unless @@ENDPOINTS['microformats'].key?(flavor)
 			return { 'status'=>'ERROR', 'statusInfo'=>'microformats parsing for ' + flavor + ' not available' }
 		end
 
-		url = @BASE_URL + 
-				@ENDPOINTS['microformats'][flavor] +
-				'?apikey=' + @api_key +
-				'&' + flavor + '=' + URI.escape(data) +
-				'&outputMode=json'
-
-		options.each do | key, value |
-			url += '&' + key + '=' + value.to_s()
-		end
-
-		return analyze(url)
+		#Add the URL encoded data to the options and analyze
+		options[flavor] = URI.escape(data)
+		return analyze(@@ENDPOINTS['microformats'][flavor], options)
 	end
 
 
@@ -611,26 +483,16 @@ module AlchemyAPI
 	# none
 	#
 	# OUTPUT:
-	# The response, already converted from JSON to a Python object. 
+	# The response, already converted from JSON to a Ruby object. 
 	#
-	def AlchemyAPI.feeds(flavor, data, options = {})
-		initialize() if @api_key.nil?
-	
-		unless @ENDPOINTS['feeds'].key?(flavor)
+	def feeds(flavor, data, options = {})
+		unless @@ENDPOINTS['feeds'].key?(flavor)
 			return { 'status'=>'ERROR', 'statusInfo'=>'feed detection for ' + flavor + ' not available' }
 		end
 
-		url = @BASE_URL + 
-				@ENDPOINTS['feeds'][flavor] +
-				'?apikey=' + @api_key +
-				'&' + flavor + '=' + URI.escape(data) +
-				'&outputMode=json'
-
-		options.each do | key, value |
-			url += '&' + key + '=' + value.to_s()
-		end
-
-		return analyze(url)
+		#Add the URL encoded data to the options and analyze
+		options[flavor] = URI.escape(data)
+		return analyze(@@ENDPOINTS['feeds'][flavor], options)
 	end
 
 
@@ -638,15 +500,28 @@ module AlchemyAPI
 
 
 	# HTTP Request wrapper that is called by the endpoint functions. This function is not intended to be called through an external interface. 
-	# It makes the call, then converts the returned JSON string into a Python object. 
+	# It makes the call, then converts the returned JSON string into a Ruby object. 
 	#
 	# INPUT:
 	# url -> the full URI encoded url
 	# 
 	# OUTPUT:
-	# The response, already converted from JSON to a Python object. 
+	# The response, already converted from JSON to a Ruby object. 
 	# 
-	def AlchemyAPI.analyze(url)
+	def analyze(url, options)
+
+		#Insert the base URL
+		url = @@BASE_URL + url
+
+		#Add the API key and set the output mode to JSON
+		url += '?apikey=' + @apiKey + '&outputMode=json'
+
+		#Add the additional options
+		options.each do | key, value |
+			url += '&' + key + '=' + value.to_s()
+		end
+
+		#Fire off the HTTP request
 		url = URI.parse(url)
 		req = Net::HTTP::Post.new(url.to_s)
 		res = Net::HTTP.start(url.host, url.port) {|http| http.request(req)}
