@@ -23,14 +23,14 @@ To use AlchemyAPI, you'll need to obtain an API key and attach that key to all r
 
 To get started and run the example, simply:
 
-	git clone https://github.com/steveherschleb/sdk_ruby.git
+	git clone https://github.com/AlchemyAPI/sdk_ruby.git
 	cd sdk_ruby
 	bundle install
-	ruby -r "./alchemyapi.rb" -e "AlchemyAPI.setkey('{API_KEY}')"
+	ruby alchemyapi.rb YOUR_KEY_HERE
 	ruby example.rb
 
 
-Just replace {API_KEY} with your key, and you should be good to go.
+Just replace YOUR_KEY_HERE with your key, and you should be good to go.
 
 Note: If you don't have bundle installed, simply use: gem install bundle (you may need to sudo)
 	

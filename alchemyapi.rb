@@ -94,20 +94,6 @@ class AlchemyAPI
 
 
 
-	# Writes the API key to api_key.txt file. It will create the file if it doesn't exist.
-	# This function is intended to be called from the Python command line using: python -c 'import alchemyapi;alchemyapi.setkey("API_KEY");'
-	# If you don't have an API key yet, register for one at: http://www.alchemyapi.com/api/register.html
-	# 
-	# INPUT:
-	# key -> Your API key from  Should be 40 hex characters
-	# 
-	# OUTPUT:
-	# none
-	#
-	def setkey(key)
-		#write the key to the file
-		File.open('api_key.txt','w') {|f| f.write(key) }
-	end
 
 
 	# Calculates the sentiment for text, a URL or HTML.
@@ -524,8 +510,37 @@ class AlchemyAPI
 		#Fire off the HTTP request
 		url = URI.parse(url)
 		req = Net::HTTP::Post.new(url.to_s)
-		res = Net::HTTP.start(url.host, url.port) {|http| http.request(req)}
+        req['Accept-Encoding'] = "identity"
+        res = Net::HTTP.start(url.host, url.port) {|http| http.request(req)}
 		
 		return JSON.parse(res.body)
 	end
 end
+
+
+
+# Writes the API key to api_key.txt file. It will create the file if it doesn't exist.
+# This function is intended to be called from the Python command line using: python -c 'import alchemyapi;alchemyapi.setkey("API_KEY");'
+# If you don't have an API key yet, register for one at: http://www.alchemyapi.com/api/register.html
+# 
+# INPUT:
+# key -> Your API key from  Should be 40 hex characters
+# 
+# OUTPUT:
+# none
+#
+
+if __FILE__==$0
+  	# this will only run if the script was the main, not load'd or require'd
+	if ARGV.length == 1
+		if (ARGV[0].length == 40)
+			puts 'Key: ' + ARGV[0] + ' was written to api_key.txt'
+			puts 'You are now ready to start using AlchemyAPI. For an example, run: ruby example.rb'
+			File.open('api_key.txt','w') {|f| f.write(ARGV[0]) }
+		else
+			puts 'The key appears to invalid. Please make sure to use the 40 character key assigned by AlchemyAPI'
+		end
+	end
+
+end
+
