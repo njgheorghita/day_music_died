@@ -1,4 +1,4 @@
-# sdk_ruby #
+# alchemyapi_ruby #
 
 A sdk for AlchemyAPI using Ruby
 
@@ -23,8 +23,8 @@ To use AlchemyAPI, you'll need to obtain an API key and attach that key to all r
 
 To get started and run the example, simply:
 
-	git clone https://github.com/AlchemyAPI/sdk_ruby.git
-	cd sdk_ruby
+	git clone https://github.com/AlchemyAPI/alchemyapi_ruby.git
+	cd alchemyapi_ruby
 	bundle install
 	ruby alchemyapi.rb YOUR_KEY_HERE
 	ruby example.rb
