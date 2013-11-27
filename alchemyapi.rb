@@ -58,15 +58,15 @@ class AlchemyAPI
 	@@ENDPOINTS['language']['url']  = '/url/URLGetLanguage'
 	@@ENDPOINTS['language']['text'] = '/text/TextGetLanguage'
 	@@ENDPOINTS['language']['html'] = '/html/HTMLGetLanguage'
-	@@ENDPOINTS['text_clean'] = {}
-	@@ENDPOINTS['text_clean']['url']  = '/url/URLGetText'
-	@@ENDPOINTS['text_clean']['html'] = '/html/HTMLGetText'
+	@@ENDPOINTS['text'] = {}
+	@@ENDPOINTS['text']['url']  = '/url/URLGetText'
+	@@ENDPOINTS['text']['html'] = '/html/HTMLGetText'
 	@@ENDPOINTS['text_raw'] = {}
 	@@ENDPOINTS['text_raw']['url']  = '/url/URLGetRawText'
 	@@ENDPOINTS['text_raw']['html'] = '/html/HTMLGetRawText'
-	@@ENDPOINTS['text_title'] = {}
-	@@ENDPOINTS['text_title']['url']  = '/url/URLGetTitle'
-	@@ENDPOINTS['text_title']['html'] = '/html/HTMLGetTitle'
+	@@ENDPOINTS['title'] = {}
+	@@ENDPOINTS['title']['url']  = '/url/URLGetTitle'
+	@@ENDPOINTS['title']['html'] = '/html/HTMLGetTitle'
 	@@ENDPOINTS['feeds'] = {}
 	@@ENDPOINTS['feeds']['url']  = '/url/URLGetFeedLinks'
 	@@ENDPOINTS['feeds']['html'] = '/html/HTMLGetFeedLinks'
@@ -86,7 +86,7 @@ class AlchemyAPI
 			if key.empty?
 				#The key file should't be blank
 				puts 'The api_key.txt file appears to be blank, please copy/paste your API key in the file: api_key.txt'
-				puts 'If you do not have an API Key from  please register for one at: http://www.alchemyapi.com/api/register.html'			
+				puts 'If you do not have an API Key from AlchemyAPI please register for one at: http://www.alchemyapi.com/api/register.html'			
 				Process.exit(1)
 			end
 			
@@ -100,7 +100,7 @@ class AlchemyAPI
 		rescue => err
 			#The file doesn't exist, so show the message and create the file.
 			puts 'API Key not found! Please copy/paste your API key into the file: api_key.txt'
-			puts 'If you do not have an API Key from  please register for one at: http://www.alchemyapi.com/api/register.html'
+			puts 'If you do not have an API Key from AlchemyAPI please register for one at: http://www.alchemyapi.com/api/register.html'
 		
 			#create a blank file to hold the key
 			File.open("api_key.txt", "w") {}
@@ -133,7 +133,7 @@ class AlchemyAPI
 		end
 
 		#Add the URL encoded data to the options and analyze
-		options[flavor] = URI.escape(data)
+		options[flavor] = data
 		return analyze(@@ENDPOINTS['sentiment'][flavor], options)
 	end
 
@@ -154,8 +154,8 @@ class AlchemyAPI
 	# OUTPUT:
 	# The response, already converted from JSON to a Ruby object. 
 	#
-	def sentiment_targeted(flavor, data,target, options = {})
-		unless targeted == ''
+	def sentiment_targeted(flavor, data, target, options = {})
+		if target == '' || target == nil
 			return { 'status'=>'ERROR', 'statusMessage'=>'targeted sentiment requires a non-null target' }
 		end
 
@@ -164,7 +164,7 @@ class AlchemyAPI
 		end
 
 		#Add the URL encoded data and the target to the options and analyze
-		options[flavor] = URI.escape(data)
+		options[flavor] = data
 		options['target'] = target
 		return analyze(@@ENDPOINTS['sentiment_targeted'][flavor], options)
 	end
@@ -197,7 +197,7 @@ class AlchemyAPI
 		end
 
 		#Add the URL encoded data to the options and analyze
-		options[flavor] = URI.escape(data)
+		options[flavor] = data
 		return analyze(@@ENDPOINTS['entities'][flavor], options)
 	end
 
@@ -223,7 +223,7 @@ class AlchemyAPI
 		end
 
 		#Add the URL encoded data to the options and analyze
-		options[flavor] = URI.escape(data)
+		options[flavor] = data
 		return analyze(@@ENDPOINTS['author'][flavor], options)
 	end
 
@@ -252,7 +252,7 @@ class AlchemyAPI
 		end
 
 		#Add the URL encoded data to the options and analyze
-		options[flavor] = URI.escape(data)
+		options[flavor] = data
 		return analyze(@@ENDPOINTS['keywords'][flavor], options)
 	end
 
@@ -275,7 +275,7 @@ class AlchemyAPI
 		end
 
 		#Add the URL encoded data to the options and analyze
-		options[flavor] = URI.escape(data)
+		options[flavor] = data
 		return analyze(@@ENDPOINTS['concepts'][flavor], options)
 	end
 
@@ -301,7 +301,7 @@ class AlchemyAPI
 		end
 
 		#Add the URL encoded data to the options and analyze
-		options[flavor] = URI.escape(data)
+		options[flavor] = data
 		return analyze(@@ENDPOINTS['category'][flavor], options)
 	end
 
@@ -336,7 +336,7 @@ class AlchemyAPI
 		end
 
 		#Add the URL encoded data to the options and analyze
-		options[flavor] = URI.escape(data)
+		options[flavor] = data
 		return analyze(@@ENDPOINTS['relations'][flavor], options)
 	end
 
@@ -362,7 +362,7 @@ class AlchemyAPI
 		end
 
 		#Add the URL encoded data to the options and analyze
-		options[flavor] = URI.escape(data)
+		options[flavor] = data
 		return analyze(@@ENDPOINTS['language'][flavor], options)
 	end
 
@@ -383,14 +383,14 @@ class AlchemyAPI
 	# OUTPUT:
 	# The response, already converted from JSON to a Ruby object. 
 	#
-	def text_clean(flavor, data, options = {})
-		unless @@ENDPOINTS['text_clean'].key?(flavor)
+	def text(flavor, data, options = {})
+		unless @@ENDPOINTS['text'].key?(flavor)
 			return { 'status'=>'ERROR', 'statusInfo'=>'clean text extraction for ' + flavor + ' not available' }
 		end
 
 		#Add the URL encoded data to the options and analyze
-		options[flavor] = URI.escape(data)
-		return analyze(@@ENDPOINTS['text_clean'][flavor], options)
+		options[flavor] = data
+		return analyze(@@ENDPOINTS['text'][flavor], options)
 	end
 
 
@@ -415,7 +415,7 @@ class AlchemyAPI
 		end
 
 		#Add the URL encoded data to the options and analyze
-		options[flavor] = URI.escape(data)
+		options[flavor] = data
 		return analyze(@@ENDPOINTS['text_raw'][flavor], options)
 	end
 
@@ -435,14 +435,14 @@ class AlchemyAPI
 	# OUTPUT:
 	# The response, already converted from JSON to a Ruby object. 
 	#
-	def text_title(flavor, data, options = {})
-		unless @@ENDPOINTS['text_title'].key?(flavor)
+	def title(flavor, data, options = {})
+		unless @@ENDPOINTS['title'].key?(flavor)
 			return { 'status'=>'ERROR', 'statusInfo'=>'title extraction for ' + flavor + ' not available' }
 		end
 
 		#Add the URL encoded data to the options and analyze
-		options[flavor] = URI.escape(data)
-		return analyze(@@ENDPOINTS['text_raw'][flavor], options)
+		options[flavor] = data
+		return analyze(@@ENDPOINTS['title'][flavor], options)
 	end
 
 
@@ -467,7 +467,7 @@ class AlchemyAPI
 		end
 
 		#Add the URL encoded data to the options and analyze
-		options[flavor] = URI.escape(data)
+		options[flavor] = data
 		return analyze(@@ENDPOINTS['microformats'][flavor], options)
 	end
 
@@ -493,7 +493,7 @@ class AlchemyAPI
 		end
 
 		#Add the URL encoded data to the options and analyze
-		options[flavor] = URI.escape(data)
+		options[flavor] = data
 		return analyze(@@ENDPOINTS['feeds'][flavor], options)
 	end
 
@@ -516,19 +516,13 @@ class AlchemyAPI
 		url = @@BASE_URL + url
 
 		#Add the API key and set the output mode to JSON
-		url += '?apikey=' + @apiKey + '&outputMode=json'
-
-		#Add the additional options
-		options.each do | key, value |
-			url += '&' + key + '=' + value.to_s()
-		end
-
-		#Fire off the HTTP request
-		url = URI.parse(url)
-		req = Net::HTTP::Post.new(url.to_s)
-		req['Accept-Encoding'] = "identity"
-		res = Net::HTTP.start(url.host, url.port) {|http| http.request(req)}
+		options['apikey'] = @apiKey
+		options['outputMode'] = 'json'
 		
+		#Fire off the HTTP request
+		res = Net::HTTP::post_form(URI.parse(url), options)
+		
+		#parse and return the response
 		return JSON.parse(res.body)
 	end
 end
