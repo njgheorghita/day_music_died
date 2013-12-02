@@ -47,39 +47,17 @@ if response['status'] == 'OK'
 		puts 'text: ' + entity['text']
 		puts 'type: ' + entity['type']
 		puts 'relevance: ' + entity['relevance']
-		puts 'sentiment: ' + entity['sentiment']['type'] + ' (' +entity['sentiment']['score'] + ')'
+		print 'sentiment: ' + entity['sentiment']['type'] 
+		
+		#Make sure score exists (it's not returned for neutral sentiment
+		if entity['sentiment'].key?('score')
+			print ' (' + entity['sentiment']['score'] + ')'
+		end
+
 		puts ''
 	end
 else
 	puts 'Error in entity extraction call: ' + response['statusInfo']
-end
-
-
-puts ''
-puts ''
-puts ''
-puts '############################################'
-puts '#   Sentiment Analysis Example             #'
-puts '############################################'
-puts ''
-puts ''
-
-puts 'Processing html: ' + demo_html
-puts ''
-
-response = alchemyapi.sentiment('html', demo_html)
-
-if response['status'] == 'OK'
-	puts '## Response Object ##'
-	puts JSON.pretty_generate(response)
-
-
-	puts ''
-	puts '## Document Sentiment ##'
-	puts 'type: ' + response['docSentiment']['type']
-	puts 'score: ' + response['docSentiment']['score']
-else
-	puts 'Error in sentiment analysis call: ' + response['statusInfo']
 end
 
 
@@ -107,7 +85,14 @@ if response['status'] == 'OK'
 	for keyword in response['keywords']
 		puts 'text: ' + keyword['text']
 		puts 'relevance: ' + keyword['relevance']
-		puts 'sentiment: ' + keyword['sentiment']['type'] + ' (' + keyword['sentiment']['score'] + ')'
+		print 'sentiment: ' + keyword['sentiment']['type'] 
+		
+
+		#Make sure score exists (it's not returned for neutral sentiment
+		if keyword['sentiment'].key?('score')
+			print ' (' + keyword['sentiment']['score'] + ')'
+		end
+
 		puts ''
 	end
 else
@@ -143,6 +128,182 @@ if response['status'] == 'OK'
 	end
 else
 	puts 'Error in concept tagging call: ' + response['statusInfo']
+end
+
+
+puts ''
+puts ''
+puts ''
+puts '############################################'
+puts '#   Sentiment Analysis Example             #'
+puts '############################################'
+puts ''
+puts ''
+
+puts 'Processing html: ' + demo_html
+puts ''
+
+response = alchemyapi.sentiment('html', demo_html)
+
+if response['status'] == 'OK'
+	puts '## Response Object ##'
+	puts JSON.pretty_generate(response)
+
+
+	puts ''
+	puts '## Document Sentiment ##'
+	puts 'type: ' + response['docSentiment']['type']
+	
+	#Make sure score exists (it's not returned for neutral sentiment
+	if response['docSentiment'].key?('score')
+		puts 'score: ' + response['docSentiment']['score']
+	end
+else
+	puts 'Error in sentiment analysis call: ' + response['statusInfo']
+end
+
+
+puts ''
+puts ''
+puts ''
+puts '############################################'
+puts '#   Targeted Sentiment Analysis Example    #'
+puts '############################################'
+puts ''
+puts ''
+
+puts 'Processing text: ' + demo_text
+puts ''
+
+response = alchemyapi.sentiment_targeted('text', demo_text, 'Denver')
+
+if response['status'] == 'OK'
+	puts '## Response Object ##'
+	puts JSON.pretty_generate(response)
+
+
+	puts ''
+	puts '## Targeted Sentiment ##'
+	puts 'type: ' + response['docSentiment']['type']
+	
+	#Make sure score exists (it's not returned for neutral sentiment
+	if response['docSentiment'].key?('score')
+		puts 'score: ' + response['docSentiment']['score']
+	end
+
+else
+	puts 'Error in targeted sentiment analysis call: ' + response['statusInfo']
+end
+
+
+puts ''
+puts ''
+puts ''
+puts '############################################'
+puts '#   Text Extraction Example                #'
+puts '############################################'
+puts ''
+puts ''
+
+puts 'Processing url: ' + demo_url
+puts ''
+
+response = alchemyapi.text('url', demo_url)
+
+if response['status'] == 'OK'
+	puts '## Response Object ##'
+	puts JSON.pretty_generate(response)
+
+
+	puts ''
+	puts '## Extracted Text ##'
+	puts 'text: ' + response['text']
+	puts ''
+else
+	puts 'Error in text extraction call: ' + response['statusInfo']
+end
+
+
+puts ''
+puts ''
+puts ''
+puts '############################################'
+puts '#   Author Extraction Example              #'
+puts '############################################'
+puts ''
+puts ''
+
+puts 'Processing url: ' + demo_url
+puts ''
+
+response = alchemyapi.author('url', demo_url)
+
+if response['status'] == 'OK'
+	puts '## Response Object ##'
+	puts JSON.pretty_generate(response)
+
+
+	puts ''
+	puts '## Author ##'
+	puts 'author: ' + response['author']
+else
+	puts 'Error in author extraction call: ' + response['statusInfo']
+end
+
+
+puts ''
+puts ''
+puts ''
+puts '############################################'
+puts '#   Language Detection Example             #'
+puts '############################################'
+puts ''
+puts ''
+
+puts 'Processing text: ' + demo_text
+puts ''
+
+response = alchemyapi.language('text', demo_text)
+
+if response['status'] == 'OK'
+	puts '## Response Object ##'
+	puts JSON.pretty_generate(response)
+
+
+	puts ''
+	puts '## Language ##'
+	puts 'text: ' + response['language']
+	puts 'iso-639-1: ' + response['iso-639-1']
+	puts 'native speakers: ' + response['native-speakers']
+else
+	puts 'Error in language detection call: ' + response['statusInfo']
+end
+
+
+puts ''
+puts ''
+puts ''
+puts '############################################'
+puts '#   Title Extraction Example               #'
+puts '############################################'
+puts ''
+puts ''
+
+puts 'Processing url: ' + demo_url
+puts ''
+
+response = alchemyapi.title('url', demo_url)
+
+if response['status'] == 'OK'
+	puts '## Response Object ##'
+	puts JSON.pretty_generate(response)
+
+
+	puts ''
+	puts '## Title ##'
+	puts 'title: ' + response['title']
+else
+	puts 'Error in title extraction call: ' + response['statusInfo']
 end
 
 
@@ -218,62 +379,6 @@ puts ''
 puts ''
 puts ''
 puts '############################################'
-puts '#   Language Detection Example             #'
-puts '############################################'
-puts ''
-puts ''
-
-puts 'Processing text: ' + demo_text
-puts ''
-
-response = alchemyapi.language('text', demo_text)
-
-if response['status'] == 'OK'
-	puts '## Response Object ##'
-	puts JSON.pretty_generate(response)
-
-
-	puts ''
-	puts '## Language ##'
-	puts 'text: ' + response['language']
-	puts 'iso-639-1: ' + response['iso-639-1']
-	puts 'native speakers: ' + response['native-speakers']
-else
-	puts 'Error in language detection call: ' + response['statusInfo']
-end
-
-
-puts ''
-puts ''
-puts ''
-puts '############################################'
-puts '#   Author Extraction Example              #'
-puts '############################################'
-puts ''
-puts ''
-
-puts 'Processing url: ' + demo_url
-puts ''
-
-response = alchemyapi.author('url', demo_url)
-
-if response['status'] == 'OK'
-	puts '## Response Object ##'
-	puts JSON.pretty_generate(response)
-
-
-	puts ''
-	puts '## Author ##'
-	puts 'author: ' + response['author']
-else
-	puts 'Error in author extraction call: ' + response['statusInfo']
-end
-
-
-puts ''
-puts ''
-puts ''
-puts '############################################'
 puts '#  Feed Detection Example                  #'
 puts '############################################'
 puts ''
@@ -298,6 +403,36 @@ else
 	puts 'Error in feed detection call: ' + response['statusInfo']
 end
 
+
+puts ''
+puts ''
+puts ''
+puts '############################################'
+puts '#  Microformats Parsing Example            #'
+puts '############################################'
+puts ''
+puts ''
+
+puts 'Processing url: ' + demo_url
+puts ''
+
+response = alchemyapi.microformats('url', demo_url)
+
+if response['status'] == 'OK'
+	puts '## Response Object ##'
+	puts JSON.pretty_generate(response)
+
+
+	puts ''
+	puts '## Microformats ##'
+	for microformat in response['microformats']
+		puts 'field: ' + microformat['field']
+		puts 'data: ' + microformat['data']
+		puts ''
+	end
+else
+	puts 'Error in microformats parsing call: ' + response['statusInfo']
+end
 
 puts ''
 puts ''
