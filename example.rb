@@ -22,7 +22,6 @@ demo_html = '<html><head><title>Python Demo | alchemyapi</title></head><body><h1
 
 alchemyapi = AlchemyAPI.new()
 
-
 puts ''
 puts ''
 puts '############################################'
@@ -487,7 +486,7 @@ puts ''
 puts 'Processing url: ' + demo_url
 puts ''
 
-response = alchemyapi.image('url', demo_url, { 'extractMode'=>'trust-metadata' })
+response = alchemyapi.image_extract('url', demo_url, { 'extractMode'=>'trust-metadata' })
 
 if response['status'] == 'OK'
 	puts '## Response Object ##'
@@ -568,3 +567,65 @@ end
 puts ''
 puts ''
 
+
+puts ''
+puts ''
+puts ''
+puts '############################################'
+puts '#  Image Tagging Example            	 #'
+puts '############################################'
+puts ''
+puts ''
+
+puts 'Processing url: ' + demo_url
+puts ''
+
+response = alchemyapi.image_tag('url', demo_url, { 'extractMode'=>'trust-metadata' })
+
+if response['status'] == 'OK'
+	puts '## Response Object ##'
+	puts JSON.pretty_generate(response)
+
+
+	puts ''
+	puts '## Image Tagging ##'
+	if response.key?('imageKeywords')
+		puts 'Keywords:'
+		for keyword in response['imageKeywords']
+			puts "\ttext: " + keyword['text']
+			puts "\tscore: " + keyword['score']
+		end
+	end
+	puts ''
+else
+	puts 'Error in image tag call: ' + response['statusInfo']
+end
+
+path_to_test_image = 'dog.jpg'
+test_image = File.binread(path_to_test_image)
+puts 'Processing image: ' + path_to_test_image
+puts ''
+
+response = alchemyapi.image_tag('image', '', { 'imagePostMode'=>'raw' }, test_image)
+
+if response['status'] == 'OK'
+	puts '## Response Object ##'
+	puts JSON.pretty_generate(response)
+
+
+	puts ''
+	puts '## Image Tagging ##'
+	if response.key?('imageKeywords')
+		puts 'Keywords:'
+		for keyword in response['imageKeywords']
+			puts "\ttext: " + keyword['text']
+			puts "\tscore: " + keyword['score']
+		end
+	end
+	puts ''
+else
+	puts 'Error in image tag call: ' + response['statusInfo']
+end
+
+puts ''
+puts ''

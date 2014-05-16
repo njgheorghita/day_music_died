@@ -23,6 +23,7 @@ class Tests < Test::Unit::TestCase
 	@@test_text = 'Bob broke my heart, and then made up this silly sentence to test the Ruby SDK'
 	@@test_html = '<html><head><title>The best SDK Test | AlchemyAPI</title></head><body><h1>Hello World!</h1><p>My favorite language is Ruby</p></body></html>'
 	@@test_url = 'http://www.nytimes.com/2013/07/13/us/politics/a-day-of-friction-notable-even-for-a-fractious-congress.html?_r=0'
+	@@test_image = File.binread('dog.jpg')
 
 	def test_entities
 		puts 'Checking entities . . . '
@@ -222,16 +223,30 @@ class Tests < Test::Unit::TestCase
 		puts ''	
 	end
 
-	def test_image
-		puts 'Checking image . . . '
-		response = @@alchemyapi.image('text', @@test_text)
+	def test_image_extract
+		puts 'Checking image extract . . . '
+		response = @@alchemyapi.image_extract('text', @@test_text)
 		assert_equal response['status'], 'ERROR'	#only valid for URL content
-		response = @@alchemyapi.image('html', @@test_html, { 'url'=>'test' })
+		response = @@alchemyapi.image_extract('html', @@test_html, { 'url'=>'test' })
 		assert_equal response['status'], 'ERROR'	#only valid for URL content
-		response = @@alchemyapi.image('url', @@test_url)
+		response = @@alchemyapi.image_extract('url', @@test_url)
 		assert_equal response['status'], 'OK'
-		puts 'Image tests complete'
+		puts 'Image extract tests complete'
 		puts ''	
+	end
+
+	def test_image_tag
+		puts 'Checking image tag . . . '
+		response = @@alchemyapi.image_tag('text', @@test_text)
+		assert_equal response['status'], 'ERROR'	#only valid for URL or image content
+		response = @@alchemyapi.image_tag('html', @@test_html, { 'url'=>'test' })
+		assert_equal response['status'], 'ERROR'	#only valid for URL or image content
+		response = @@alchemyapi.image_tag('url', @@test_url)
+		assert_equal response['status'], 'OK'
+		response = @@alchemyapi.image_tag('image', '', { 'imagePostMode'=>'raw' }, @@test_image)
+		assert_equal response['status'], 'OK'
+		puts 'Image tag tests complete'
+		puts ''
 	end
 
 end
