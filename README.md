@@ -1,6 +1,6 @@
 # alchemyapi_ruby #
 
-A sdk for AlchemyAPI using Ruby
+A sdk for AlchemyAPI using Ruby - **_Please note that this legacy AlchemyAPI SDK is no longer supported by IBM. Please use the Watson SDKs https://github.com/watson-developer-cloud?utf8=✓&query=sdk_**
 
 
 ## AlchemyAPI ##
